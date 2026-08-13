@@ -219,3 +219,6 @@ __marimo__/
 
 # Testing .ipynb file(S)
 test.ipynb
+
+# Raw data files
+response.json
