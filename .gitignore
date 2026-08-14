@@ -222,3 +222,7 @@ test.ipynb
 
 # Raw data files
 response.json
+data/raw/*
+
+# Configuration files
+config.json
