@@ -21,29 +21,50 @@ if not config_path.exists():
 with open(config_path) as f:
     CONFIG = json.load(f)
 
+# Main Function
 def main():
     dataframes_dict = {}
-    for e in CONFIG["endpoints"]:
-        logger = utils.setup_logging(CONFIG["log_dir"])
+    logger = utils.setup_logging(CONFIG["log_dir"])
+    
+    # 1. Download
+    for e in CONFIG["endpoints"].keys():
         logger.info("Starting AFL data ingestion")
 
-        # 1. Download
-        zip_byte = utils.download_afl_data(
-            url=f"{CONFIG["afl_url"]}/{e}",
-            timeout=CONFIG["request_timeout_seconds"],
-            logger=logger,
-            api_key=api_key # type: ignore # used  to suppress mypy error about Optional[str] vs str
-        )
+        url_params = CONFIG["endpoints"][e]
+        if url_params == 'N/A':
+            url_params = None
+            zip_byte = utils.download_afl_data(
+                url=f"{CONFIG["afl_url"]}",
+                url_params=CONFIG["endpoints"][e],
+                endpoint=e,
+                timeout=CONFIG["request_timeout_seconds"],
+                logger=logger,
+                api_key=api_key # type: ignore # used  to suppress mypy error about Optional[str] vs str
+            )
+        else:
+            for p in url_params:
+                zip_byte = utils.download_afl_data(
+                    url=f"{CONFIG["afl_url"]}",
+                    url_params=p,
+                    endpoint=e,
+                    timeout=CONFIG["request_timeout_seconds"],
+                    logger=logger,
+                    api_key=api_key # type: ignore # used  to suppress mypy error about Optional[str] vs str
+                )
 
-        # 2. Extract
+    # 2. Extract
+    raw_bytes_dir = Path(__file__).parent /  './data/raw'
+    raw_bytes = list(raw_bytes_dir.iterdir())
+
+    for r in raw_bytes:
+        logger.info(f"Extracting data from {r.name}")
         dataframe = utils.extract_afl_data(
-            data_bytes=zip_byte,
+            data_bytes=r.read_bytes(),
             output_dir=CONFIG["output_dir"],
-            target_file=e,
+            target_file=r.name.split('.')[0],
             logger=logger,
         )
-
-        dataframes_dict[e] = dataframe
+        dataframes_dict[r.name.split('.')[0]] = dataframe
 
 if __name__ == "__main__":
     main()

@@ -47,8 +47,8 @@ def download_afl_data(
     headers = {
         'x-apisports-key': api_key,
     }
-    if url_params:
-        full_url = f"{url}/{endpoint}?{'&'.join([f'{k}={v}' for k, v in url_params.items()])}"
+    if url_params != 'N/A':
+        full_url = f"{url}/{endpoint}?{'&'.join([f'{k}={v}' for k, v in url_params.items()])}" # type: ignore
     else:
         full_url = f"{url}/{endpoint}"
 
