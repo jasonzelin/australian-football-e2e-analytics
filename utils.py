@@ -37,8 +37,11 @@ def download_afl_data(
         endpoint: str,
         api_key: str,
         timeout: int,
+        output_dir: str,
+        target_folder:str,
+        target_file:str,
         logger: logging.Logger
-    ) -> bytes:
+    ) -> None:
     """
     Download the AFL data as JSON from the specified URL.
     Returns raw bytes so we can read it in-memory without touching disk.
@@ -60,7 +63,15 @@ def download_afl_data(
     if json.loads(response.text)['errors'] != []:
         logger.error(f"API returned errors: {json.loads(response.text)['errors']}")
 
-    return response.content
+    # Path(output_dir).mkdir(parents=True, exist_ok=True)
+    output_file = Path(f"{output_dir}/{target_folder}/{target_file}.json")
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+    output_file.write_bytes(response.content)
+
+    dataframe = pd.DataFrame(json.loads(response.content)['response'])
+    logger.info(f"Loaded '{target_folder}/{target_file}' — {len(dataframe):,} rows, {len(dataframe.columns)} columns")
+
+    return None
 
 # ---------------------------------------------------------------------------
 # STEP 2 — Inspect ZIP contents and extract target files
@@ -68,6 +79,7 @@ def download_afl_data(
 def extract_afl_data(
         data_bytes: bytes,
         output_dir: str,
+        target_folder: str,
         target_file: str,
         logger: logging.Logger,
     ) -> pd.DataFrame:
@@ -76,7 +88,7 @@ def extract_afl_data(
     Returns a DataFrame.
     """
     Path(output_dir).mkdir(parents=True, exist_ok=True)
-    output_file = Path(output_dir) / f"{target_file}.json"
+    output_file = Path(output_dir) / f"{target_folder} / {target_file}.json"
     output_file.write_bytes(data_bytes)
 
     dataframe = pd.DataFrame(json.loads(data_bytes)['response'])
