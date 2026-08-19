@@ -1,3 +1,9 @@
-requests
-pandas
-dotenv
+dotenv==0.9.9
+requests==2.34.2
+pandas==3.0.5
+
+# Google Cloud SDKs
+google-cloud-storage==2.17.0
+google-cloud-bigquery==3.25.0
+google-cloud-firestore==2.16.0
+google-cloud-aiplatform==1.60.0

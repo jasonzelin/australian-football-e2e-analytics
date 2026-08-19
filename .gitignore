@@ -223,6 +223,7 @@ test.ipynb
 # Raw data files
 response.json
 data/raw/*
+data/intermediate/*
 
 # Configuration files
 config.json
