@@ -38,6 +38,9 @@ def main():
                 url_params=CONFIG["endpoints"][e],
                 endpoint=e,
                 timeout=CONFIG["request_timeout_seconds"],
+                output_dir=CONFIG["output_dir"],
+                target_folder=e,
+                target_file=e,
                 logger=logger,
                 api_key=api_key # type: ignore # used  to suppress mypy error about Optional[str] vs str
             )
@@ -48,23 +51,26 @@ def main():
                     url_params=p,
                     endpoint=e,
                     timeout=CONFIG["request_timeout_seconds"],
+                    output_dir=CONFIG["output_dir"],
+                    target_folder=e,
+                    target_file='_'.join([f'{k}={v}' for k, v in p.items()]),
                     logger=logger,
                     api_key=api_key # type: ignore # used  to suppress mypy error about Optional[str] vs str
                 )
 
-    # 2. Extract
-    raw_bytes_dir = Path(__file__).parent /  './data/raw'
-    raw_bytes = list(raw_bytes_dir.iterdir())
+    # # 2. Extract
+    # raw_bytes_dir = Path(__file__).parent /  './data/raw'
+    # raw_bytes = list(raw_bytes_dir.iterdir())
 
-    for r in raw_bytes:
-        logger.info(f"Extracting data from {r.name}")
-        dataframe = utils.extract_afl_data(
-            data_bytes=r.read_bytes(),
-            output_dir=CONFIG["output_dir"],
-            target_file=r.name.split('.')[0],
-            logger=logger,
-        )
-        dataframes_dict[r.name.split('.')[0]] = dataframe
+    # for r in raw_bytes:
+    #     logger.info(f"Extracting data from {r.name}")
+    #     dataframe = utils.extract_afl_data(
+    #         data_bytes=r.read_bytes(),
+    #         output_dir=CONFIG["output_dir"],
+    #         target_file=r.name.split('.')[0],
+    #         logger=logger,
+    #     )
+    #     dataframes_dict[r.name.split('.')[0]] = dataframe
 
 if __name__ == "__main__":
     main()
