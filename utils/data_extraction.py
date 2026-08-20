@@ -25,7 +25,6 @@ def download_afl_data(
     ) -> None:
     """
     Download the AFL data as JSON from the specified URL.
-    Returns raw bytes so we can read it in-memory without touching disk.
     """
     payload={}
     headers = {
@@ -63,7 +62,7 @@ def download_afl_data(
     return None
 
 # ---------------------------------------------------------------------------
-# STEP 2 — Inspect ZIP contents and extract target files
+# STEP 2 — Combine raw data files per endpoint into one CSV file
 # ---------------------------------------------------------------------------
 def extract_afl_data(
         raw_data_dir: str,
@@ -72,7 +71,6 @@ def extract_afl_data(
     ) -> None:
     """
     Open the bytes file, then extract only the target files into pandas DataFrames.
-    Returns a DataFrame.
     """
     Path(output_dir).mkdir(parents=True, exist_ok=True)
 
