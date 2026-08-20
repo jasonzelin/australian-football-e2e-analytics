@@ -4,6 +4,7 @@ AFL_URL = "https://v1.afl.api-sports.io"
 
 RAW_OUTPUT_DIR =  "data/raw"
 INTERMEDIATE_OUTPUT_DIR = "data/intermediate"
+SCHEMA_VERIF_OUTPUT_DIR = "data/schema_verification_results"
 LOG_DIR = "logs"
 
 REQUEST_TIMEOUT_SECONDS = 60
@@ -262,35 +263,78 @@ ENDPOINTS = {
 
 TARGET_SCHEMA = {
     "seasons": {
-        "transaction_id": {
-            "description": "Unique identifier for the transaction or item record.",
-            "bq_type": "STRING",
-            "example_values": ["AU-99283", "TXN-7721", "100234"]
-        },
-        "store_name": {
-            "description": "Human-readable store name or location code. ",
-            "bq_type": "STRING",
-            "example_values": ["SYD_CBD_01", "Melbourne East", "BNE-NORTH-02"]
-        },
-        "total_amount": {
-            "description": "Final price, sale value, or quantity. May be labelled as MSRP, Val, Price, AMT, or similar.",
+        "season_year": {
+            "description": "The year of the season.",
             "bq_type": "NUMERIC",
-            "example_values": [145.50, 22.00, 310.99]
-        },
-        "currency_code": {
-            "description": "ISO 4217 currency code. Default to 'AUD' if not present.",
-            "bq_type": "STRING",
-            "example_values": ["AUD", "USD"]
-        },
-        "event_timestamp": {
-            "description": "When the record was created or the transaction occurred. Handle mixed formats: ISO-8601, DD/MM/YYYY, epoch seconds.",
-            "bq_type": "TIMESTAMP",
-            "example_values": ["2026-03-28T08:00:00Z", "28/03/2026 08:05:00"]
+            "example_values": [2020, 2026]
         }
     },
-    "leagues": "leagues",
-    "teams": "teams",
-    "players": "players",
+    "leagues": {
+        "id": {
+            "description": "Identifier for the league",
+            "bq_type": "NUMERIC",
+            "example_values": [1, 2, 3]
+        },
+        "name": {
+            "description": "The name of the league. ",
+            "bq_type": "STRING",
+            "example_values": ["AFL Premiership"]
+        },
+        "logo": {
+            "description": "The URL string of the logo of the league.",
+            "bq_type": "STRING",
+            "example_values": ["https://media.api-sports.io/afl/leagues/1.png"]
+        },
+        "season": {
+            "description": "The year of the league.",
+            "bq_type": "NUMERIC",
+            "example_values": [2011, 2020, 2023]
+        },
+        "start": {
+            "description": "Date of when the league started.",
+            "bq_type": "DATE",
+            "example_values": ["2026-03-28", "28/03/2026"]
+        },
+        "end": {
+            "description": "Date of when the league ended or will end",
+            "bq_type": "DATE",
+            "example_values": ["2026-08-28", "28/08/2026"]
+        },
+        "current": {
+            "description": "Boolean value indicating whether or not the league is currently ongoing.",
+            "bq_type": "BOOLEAN",
+            "example_values": ["True", "False"]
+        }
+    },
+    "teams": {
+        "id": {
+            "description": "The unique identifier of each team.",
+            "bq_type": "NUMERIC",
+            "example_values": [1, 3, 6]
+        },
+        "name": {
+            "description": "The name of the team.",
+            "bq_type": "STRING",
+            "example_values": ["Gold Coast Suns", "Fremantle Dockers","Western Bulldogs"]
+        },
+        "logo": {
+            "description": "The URL string of the team's logo.",
+            "bq_type": "STRING",
+            "example_values": ["https://media.api-sports.io/afl/teams/6.png", "https://media.api-sports.io/afl/teams/10.png"]
+        }
+    },
+    "players": {
+        "id": {
+            "description": "The unique identifier of each player.",
+            "bq_type": "NUMERIC",
+            "example_values": [1, 3, 6]
+        },
+        "name": {
+            "description": "The name of the player.",
+            "bq_type": "STRING",
+            "example_values": ["Oliver Florent", "Chad Warner"]
+        }
+    },
     "games": {
         "game": {
             "description": "Id mapping for the game",
@@ -358,7 +402,38 @@ TARGET_SCHEMA = {
             "example_values": ["{'home': {'score': 58, 'goals': 8, 'behinds': 10, 'psgoals': 0, 'psbehinds': 0}, 'away': {'score': 124, 'goals': 19, 'behinds': 10, 'psgoals': 0, 'psbehinds': 0}}"]
         }
     },
-    "standings": "standings"
+    "standings": {
+        "position": {
+            "description": "The unique identifier of each standing.",
+            "bq_type": "NUMERIC",
+            "example_values": [1, 3, 6]
+        },
+        "team": {
+            "description": "The data of the team in JSON format.",
+            "bq_type": "JSON",
+            "example_values": ["{'id': 14, 'name': 'Sydney Swans', 'logo': 'https://media.api-sports.io/afl/teams/14.png'}"]
+        },
+        "pts": {
+            "description": "The total points possessed by the team in each standing.",
+            "bq_type": "NUMERIC",
+            "example_values": [68, 56]
+        },
+        "games": {
+            "description": "The games statistics possessed by the team in each standing.",
+            "bq_type": "JSON",
+            "example_values": ["{'played': 23, 'win': 17, 'drawn': 0, 'lost': 6}"]
+        },
+        "points": {
+            "description": "The for and against points possessed by the team in each standing.",
+            "bq_type": "JSON",
+            "example_values": ["{'for': 2242, 'against': 1769}"]
+        },
+        "last_5": {
+            "description": "The last 5 victory status of each standing. Win is identified by W, whereas lose is by L.",
+            "bq_type": "STRING",
+            "example_values": ["WWLWW", "LLLWW"]
+        }
+    }
 }
 
 GEMINI_MODEL = "gemini-2.5-flash",
