@@ -1,8 +1,6 @@
-import io
-import os
+from utils import logger
 import json
 import logging
-import zipfile
 from datetime import datetime
 import time
 from pathlib import Path
@@ -10,25 +8,6 @@ import re
 
 import pandas as pd
 import requests
-# from google.cloud.bigquery.client import Client
-# import pandas_gbq
-
-# ---------------------------------------------------------------------------
-# LOGGING
-# ---------------------------------------------------------------------------
-def setup_logging(log_dir: str) -> logging.Logger:
-    Path(log_dir).mkdir(parents=True, exist_ok=True)
-    log_file = Path(log_dir) / f"ingest_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
-
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s | %(levelname)s | %(message)s",
-        handlers=[
-            logging.FileHandler(log_file),
-            logging.StreamHandler(),          # also print to console
-        ],
-    )
-    return logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # STEP 1 — Download the AFL data as JSON

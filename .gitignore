@@ -225,5 +225,6 @@ response.json
 data/raw/*
 data/intermediate/*
 
-# Configuration files
+# Config files
 config.json
+service_account_key.json
