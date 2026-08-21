@@ -224,6 +224,7 @@ test.ipynb
 response.json
 data/raw/*
 data/intermediate/*
+data/schema_verification_results/*
 
 # Config files
 config.json

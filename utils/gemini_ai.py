@@ -12,7 +12,11 @@ from vertexai.generative_models import GenerativeModel, GenerationConfig
 
 logger = app_logger.setup_logging(log_dir=config.LOG_DIR)
 
-def gemini_schema_verify(data_dir: str, project_id: str, location: str) -> dict:
+def gemini_schema_verify(
+        data_dir: str,
+        project_id: str,
+        location: str
+    ) -> dict:
 
     vertexai.init(project=project_id, location=location)
     data = Path(data_dir)
@@ -30,7 +34,7 @@ def gemini_schema_verify(data_dir: str, project_id: str, location: str) -> dict:
     )
     return json.loads(response.text.replace('```','').replace('json','')) #type: ignore
 
-def schema_verification_store(
+def store_schema_verification(
         schema_verif_result: dict,
         output_dir: str,
         file_name: str,
@@ -39,7 +43,7 @@ def schema_verification_store(
     """
     Store the results schema verification
     """
-    logger.info(f"Storing schema verification results to {output_dir}/{file_name}.csv")
+    logger.info(f"Storing schema verification results to {output_dir}/{file_name}")
 
     Path(output_dir).mkdir(parents=True, exist_ok=True)
 

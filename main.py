@@ -1,7 +1,8 @@
 import dotenv
 import os
+from pathlib import Path
 
-from utils import logger as app_logger, data_extraction
+from utils import logger as app_logger, data_extraction, gemini_ai
 import config
 
 dotenv.load_dotenv()
@@ -50,6 +51,23 @@ def main():
         output_dir=config.INTERMEDIATE_OUTPUT_DIR,
         logger=logger,
     )
+
+    # 3. Data Schema Verification (using Gemini Gen AI)
+    intermediate_data_dir = config.INTERMEDIATE_OUTPUT_DIR
+    intermediate_data_list = Path(intermediate_data_dir).iterdir()
+    for i in intermediate_data_list:
+        schema_verif_result = gemini_ai.gemini_schema_verify(
+            data_dir=f"{intermediate_data_dir}/{i.name}",
+            project_id=os.getenv("GCP_PROJECT_ID"), # type: ignore # used  to suppress mypy error about Optional[str] vs str
+            location=os.getenv("GCP_LOCATION") # type: ignore # used  to suppress mypy error about Optional[str] vs str
+        )
+
+        gemini_ai.store_schema_verification(
+            schema_verif_result=schema_verif_result,
+            output_dir=config.SCHEMA_VERIF_OUTPUT_DIR,
+            file_name=i.name,
+            logger=logger
+        )
 
 if __name__ == "__main__":
     main()

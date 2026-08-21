@@ -40,6 +40,7 @@ def download_afl_data(
     response.raise_for_status() # raises on 4xx/5xx
     if re.search(r'rateLimit', str(json.loads(response.text)['errors'])):
         logger.error(f"API returned errors: {json.loads(response.text)['errors']}")
+        logger.info("Waiting for 60 seconds before retrying...")
         time.sleep(60)  # wait 60 seconds before retrying
 
         response = requests.get(full_url, headers=headers, timeout=timeout)
