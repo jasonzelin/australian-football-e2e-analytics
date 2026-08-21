@@ -436,7 +436,7 @@ TARGET_SCHEMA = {
     }
 }
 
-GEMINI_MODEL = "gemini-2.5-flash",
+GEMINI_MODEL = "gemini-2.5-flash"
 GEMINI_GENERATION_CONFIG = {
     "temperature": 0.2,
     "max_output_tokens": 65536
