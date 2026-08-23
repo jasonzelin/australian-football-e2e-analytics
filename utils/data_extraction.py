@@ -36,11 +36,15 @@ def download_afl_data(
         full_url = f"{url}/{endpoint}"
 
     logger.info(f"Downloading raw data from: {full_url}")
+    logger.info("-" * 55)
     response = requests.get(full_url, headers=headers, timeout=timeout)
     response.raise_for_status() # raises on 4xx/5xx
     if re.search(r'rateLimit', str(json.loads(response.text)['errors'])):
         logger.error(f"API returned errors: {json.loads(response.text)['errors']}")
+        logger.info("-" * 55)
+
         logger.info("Waiting for 60 seconds before retrying...")
+        logger.info("-" * 55)
         time.sleep(60)  # wait 60 seconds before retrying
 
         response = requests.get(full_url, headers=headers, timeout=timeout)
@@ -48,10 +52,12 @@ def download_afl_data(
 
     elif json.loads(response.text)['errors'] != []:
         logger.error(f"API returned errors: {json.loads(response.text)['errors']}")
+        logger.info("-" * 55)
 
     else:
         size_mb = len(response.content) / (1024)
         logger.info(f"Download complete — {size_mb:.1f} kB received")
+        logger.info("-" * 55)
 
         output_file = Path(f"{output_dir}/{target_folder}/{target_file}.json")
         output_file.parent.mkdir(parents=True, exist_ok=True)
