@@ -31,13 +31,13 @@ An end-to-end data engineering portfolio project that ingests, transforms, and v
 |---|---|---|
 | Ingestion | Python (`requests`, `pandas`, `google-cloud-bigquery`) | Download and clean AFL's data from API endpoints |
 | Schema Verification | Python (`google-cloud-aiplatform`) | Use Gen AI semantics to verify schema |
-<!-- | Orchestration | Apache Airflow 3.3 | Schedule and sequence pipeline tasks regularly | -->
 | Data Warehouse | Google BigQuery | Store and compute all data layers |
+| Version Control | Git + GitHub | Source control and documentation hosting |
+<!-- | Orchestration | Apache Airflow 3.3 | Schedule and sequence pipeline tasks regularly | -->
 <!-- | Transformation | dbt Core | Model bronze → silver → gold layers |
 | Testing | dbt tests | Schema tests and unit tests for ingestion functions | -->
 <!-- | Visualisation | Metabase | Interactive dashboard on gold layer | -->
 <!-- | CI/CD | GitHub Actions | Auto-deploy dbt docs to GitHub Pages on push to main | -->
-| Version Control | Git + GitHub | Source control and documentation hosting |
 
 ---
 
