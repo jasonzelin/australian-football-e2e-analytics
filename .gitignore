@@ -229,3 +229,4 @@ data/schema_verification_results/*
 # Config files
 config.json
 service_account_key.json
+dbt_afl/profiles.yml
