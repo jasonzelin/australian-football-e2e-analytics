@@ -4,10 +4,10 @@ with source as (
 
 select
     position
-    ,regexp_replace_all(team, r"\'", '"') as team
+    ,regexp_replace(team, r"\'", '"') as team
     ,pts
-    ,regexp_replace_all(games, r"\'", '"') as games
-    ,regexp_replace_all(points, r"\'", '"') as points
+    ,regexp_replace(games, r"\'", '"') as games
+    ,regexp_replace(points, r"\'", '"') as points
     ,last_5
 from
     source

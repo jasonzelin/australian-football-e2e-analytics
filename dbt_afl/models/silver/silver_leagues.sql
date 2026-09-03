@@ -8,9 +8,9 @@ with source as (
         ,name
         ,logo
         ,season
-        ,start::date as start_date
-        ,end::date as end_date
-        ,current
+        ,safe_cast(`start` as date) as start_date
+        ,safe_cast(`end` as date) as end_date
+        ,`current`
     from
         source
 )

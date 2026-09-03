@@ -4,17 +4,17 @@ with source as (
 
 ,raw as (
     select
-        game::json_extract_scalar('$.game_id') as game_id
-        ,league::json_extract_scalar('$.league_id') as league_id
-        ,date::datetime as datetime
+        safe.parse_json(regexp_replace(game, r"\'", '"')) as game_id
+        ,safe.parse_json(regexp_replace(league, r"\'", '"')) as league_id
+        ,date as datetime
         ,timezone
         ,round
         ,week
         ,venue
         ,attendance
-        ,regex_replace_all(status, r"\'", '"') as status
-        ,regex_replace_all(teams, r"\'", '"') as teams
-        ,regex_replace_all(scores, r"\'", '"') as scores
+        ,safe.parse_json(regexp_replace(status, r"\'", '"')) as status
+        ,safe.parse_json(regexp_replace(teams, r"\'", '"')) as teams
+        ,safe.parse_json(regexp_replace(scores, r"\'", '"')) as scores
     from
         source
 )
