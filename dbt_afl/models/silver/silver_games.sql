@@ -12,9 +12,12 @@ with source as (
         ,week
         ,venue
         ,attendance
-        ,safe.parse_json(regexp_replace(status, r"\'", '"')) as status
-        ,safe.parse_json(regexp_replace(teams, r"\'", '"')) as teams
-        ,safe.parse_json(regexp_replace(scores, r"\'", '"')) as scores
+        ,JSON_EXTRACT(safe.parse_json(regexp_replace(status, r"\'", '"')), '$.long') as long_status
+        ,JSON_EXTRACT(safe.parse_json(regexp_replace(status, r"\'", '"')), '$.short') as short_status
+        ,JSON_EXTRACT(safe.parse_json(regexp_replace(teams, r"\'", '"')), "$.home.id") as home_team_id
+        ,JSON_EXTRACT(safe.parse_json(regexp_replace(teams, r"\'", '"')), "$.away") as away_team_id
+        ,JSON_EXTRACT(safe.parse_json(regexp_replace(scores, r"\'", '"')), "$.home") as home_scores
+        ,JSON_EXTRACT(safe.parse_json(regexp_replace(scores, r"\'", '"')), "$.away") as away_scores
     from
         source
 )
