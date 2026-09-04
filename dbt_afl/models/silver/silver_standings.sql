@@ -4,10 +4,10 @@ with source as (
 
 select
     position
-    ,regexp_replace(team, r"\'", '"') as team
+    ,LAX_INT64(JSON_EXTRACT(safe.parse_json(regexp_replace(team, r"\'", '"')), "$.id")) as team_id
     ,pts
-    ,regexp_replace(games, r"\'", '"') as games
-    ,regexp_replace(points, r"\'", '"') as points
+    ,LAX_INT64(JSON_EXTRACT(safe.parse_json(regexp_replace(games, r"\'", '"')), "$.id")) as games_id
+    ,LAX_INT64(JSON_EXTRACT(safe.parse_json(regexp_replace(points, r"\'", '"')), "$.id")) as points_id
     ,last_5
 from
     source
