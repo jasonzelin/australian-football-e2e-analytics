@@ -6,8 +6,8 @@ with games as (
 )
 SELECT
 	g.* EXCEPT(home_team_id, away_team_id, home_scores, away_scores)
-	,JSON_EXTRACT(g.home_scores, '$.score') AS home_score
-	,JSON_EXTRACT(g.away_scores, '$.score') AS away_score
+	,LAX_INT64(JSON_EXTRACT(g.home_scores, '$.score')) AS home_score
+	,LAX_INT64(JSON_EXTRACT(g.away_scores, '$.score')) AS away_score
 	,ht.name AS home_team_name
 	,awt.name AS away_team_name
 FROM

@@ -6,7 +6,7 @@ with games as (
 )
 SELECT
 	awt.name AS team_name
-	,COUNT(*) AS hosting_count
+	,COUNT(*) AS attending_count
 FROM
 	games g
 	LEFT JOIN teams awt ON g.away_team_id = awt.id

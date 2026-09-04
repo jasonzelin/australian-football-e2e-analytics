@@ -69,7 +69,7 @@ models:
           - unique
           - not_null 
 
-      - name: hosting_count
+      - name: attending_count
         description: count of away games for each team.
 
   # ---------------------------------------------------------------------------

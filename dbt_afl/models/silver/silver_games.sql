@@ -4,8 +4,8 @@ with source as (
 
 ,raw as (
     select
-        JSON_EXTRACT(safe.parse_json(regexp_replace(game, r"\'", '"')), "$.id") as game_id
-        ,JSON_EXTRACT(safe.parse_json(regexp_replace(league, r"\'", '"')), "$.id") as league_id
+        LAX_INT64(JSON_EXTRACT(safe.parse_json(regexp_replace(game, r"\'", '"')), "$.id")) as game_id
+        ,LAX_INT64(JSON_EXTRACT(safe.parse_json(regexp_replace(league, r"\'", '"')), "$.id")) as league_id
         ,DATETIME(SAFE_CAST(date AS TIMESTAMP)) as datetime
         ,timezone
         ,round
