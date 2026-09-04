@@ -3,7 +3,7 @@ version: '3.8'
 services:
   metabase:
     image: metabase/metabase:latest
-    container_name: metabase
+    container_name: metabase_afl
     ports:
       - "3000:3000"
     environment:
