@@ -14,5 +14,3 @@ WHERE TRUE
 	AND STRING(g.long_status) = 'Finished'
 GROUP BY
 	ht.name
-ORDER BY
-	COUNT(*) DESC
