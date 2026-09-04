@@ -1,0 +1,13 @@
+version: 2
+
+sources:
+  - name: silver
+    database: "{{ env_var('GCP_PROJECT_ID') }}"
+    schema: silver
+    tables:
+      - name: silver_games
+      - name: silver_leagues
+      - name: silver_players
+      - name: silver_seasons
+      - name: silver_standings
+      - name: silver_teams

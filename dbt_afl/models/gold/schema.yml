@@ -1,0 +1,75 @@
+version: 2
+
+models:
+  - name: gold_overall_games
+    description: >
+      Data summarizing all games in the AFL dataset.
+    columns:
+      - name: game_id
+        description: unique identifier for each game in the AFL dataset.
+        tests:
+          - unique
+          - not_null 
+
+      - name: league_id
+        description: unique identifier for each league in the AFL dataset.
+
+      - name: datetime
+        description: date and time when the game is scheduled to take place.
+
+      - name: timezone
+        description: timezone of the location where the game is being played.
+
+      - name: round
+        description: round of the season in which the game is being played.
+
+      - name: week
+        description: week of the season in which the game is being played.
+
+      - name: venue
+        description: venue where the game is being played.
+
+      - name: attendance
+        description: number of spectators at the game.
+
+      - name: status
+        description: JSON object containing the statuses for the long and short of the game.
+
+      - name: teams
+        description: JSON object containing the home and away teams for the game.
+
+      - name: scores
+        description: JSON object containing the scores for the home and away teams for the game.
+
+
+  # ---------------------------------------------------------------------------
+
+  - name: gold_team_counts_home
+    description: >
+      Data summarizing all the teams in the AFL along with their home game counts.
+    columns:
+      - name: team_name
+        description: name of the team.
+        tests:
+          - unique
+          - not_null 
+
+      - name: hosting_count
+        description: count of home games for each team.
+
+  # ---------------------------------------------------------------------------
+
+  - name: gold_team_counts_away
+    description: >
+      Data summarizing all the teams in the AFL along with their away game counts.
+    columns:
+      - name: team_name
+        description: name of the team.
+        tests:
+          - unique
+          - not_null 
+
+      - name: hosting_count
+        description: count of away games for each team.
+
+  # ---------------------------------------------------------------------------
