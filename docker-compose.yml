@@ -12,27 +12,7 @@ services:
     volumes:
       - metabase_data:/metabase-data
       - ./data:/data
-    networks:
-      - metabase_network
-    restart: unless-stopped
-
-  postgres:
-    image: postgres:15-alpine
-    container_name: metabase_postgres
-    environment:
-      POSTGRES_USER: metabase_user
-      POSTGRES_PASSWORD: secure_password_123
-      POSTGRES_DB: metabase
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - metabase_network
     restart: unless-stopped
 
 volumes:
   metabase_data:
-  postgres_data:
-
-networks:
-  metabase_network:
-    driver: bridge
