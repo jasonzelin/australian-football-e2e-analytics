@@ -6,6 +6,7 @@ RAW_OUTPUT_DIR =  "data/raw"
 INTERMEDIATE_OUTPUT_DIR = "data/intermediate"
 SCHEMA_VERIF_OUTPUT_DIR = "data/schema_verification_results"
 LOG_DIR = "logs"
+DBT_DIR = "dbt_afl"
 
 REQUEST_TIMEOUT_SECONDS = 60
 
@@ -473,3 +474,6 @@ Data Governance. Map incoming RAW_DATA_SAMPLES to the TARGET_SCHEMA below.
 
 5. OUTPUT: Return ONLY valid JSON matching the response schema. No preamble.
 """
+
+MINIMUM_GLOBAL_CONFIDENCE_THRESHOLD = 0.9
+SLACK_CHANNEL_ID = "C0C044W255J"
