@@ -3,6 +3,8 @@ from pathlib import Path
 import logging
 
 import pandas as pd
+
+from utils import logger as app_logger
 import config
 
 import vertexai

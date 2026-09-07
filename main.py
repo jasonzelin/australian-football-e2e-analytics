@@ -64,7 +64,8 @@ def main():
         schema_verif_result = gemini_ai.gemini_schema_verify(
             data_dir=f"{intermediate_data_dir}/{i.name}",
             project_id=os.getenv("GCP_PROJECT_ID"), # type: ignore # used  to suppress mypy error about Optional[str] vs str
-            location=os.getenv("GCP_LOCATION") # type: ignore # used  to suppress mypy error about Optional[str] vs str
+            location=os.getenv("GCP_LOCATION"), # type: ignore # used  to suppress mypy error about Optional[str] vs str
+            logger=logger
         )
 
         gemini_ai.store_schema_verification(
