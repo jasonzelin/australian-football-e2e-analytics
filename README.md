@@ -17,7 +17,7 @@ An end-to-end data engineering portfolio project that ingests, transforms, and v
 **3. Load** — An Airflow task uploads the CSVs from `data/raw/` into BigQuery's `bronze` dataset, overwriting the previous run's data on each execution.
 
 **4. Transform** — dbt runs three layers of transformation inside BigQuery:
-- **Bronze** — raw source tables, no transformation, direct reflection of the GTFS feed
+- **Bronze** — raw source tables, no transformation, direct reflection of the AFL API data
 - **Silver** — cleaned and typed models, one per source table, with standardised column names, cast data types, and derived labels
 - **Gold** — aggregated mart tables that answer specific business questions, used directly by the dashboard
 
@@ -31,29 +31,26 @@ An end-to-end data engineering portfolio project that ingests, transforms, and v
 |---|---|---|
 | Ingestion | Python (`requests`, `pandas`, `google-cloud-bigquery`) | Download and clean AFL's data from API endpoints |
 | Schema Verification | Python (`google-cloud-aiplatform`) | Use Gen AI semantics to verify schema |
+| Alert Notification | API in Python (`slack-sdk`) | Use Slack Bot API to alert schema verification results |
+| Orchestration | Apache Airflow 3.3 | Schedule and sequence pipeline tasks regularly |
+| Transformation | dbt Core | Model bronze → silver → gold layers |
+| Testing | dbt tests | Schema tests and unit tests for ingestion functions |
 | Data Warehouse | Google BigQuery | Store and compute all data layers |
-| Version Control | Git + GitHub | Source control and documentation hosting |
-<!-- | Orchestration | Apache Airflow 3.3 | Schedule and sequence pipeline tasks regularly | -->
-<!-- | Transformation | dbt Core | Model bronze → silver → gold layers |
-| Testing | dbt tests | Schema tests and unit tests for ingestion functions | -->
-<!-- | Visualisation | Metabase | Interactive dashboard on gold layer | -->
-<!-- | CI/CD | GitHub Actions | Auto-deploy dbt docs to GitHub Pages on push to main | -->
+| Visualisation | Metabase | Interactive dashboard on gold layer |
+| CI/CD| Git + GitHub | Source control and documentation hosting |
 
 ---
 
-<!-- ## Project Structure
+## Project Structure
 
 ```
-transperth-data-etl/
-├── config.py                  # pipeline configuration (gitignored)
-├── config.example.json          # template — copy to config.json
+australian-football-e2e-analytics/
+├── config.py                  # pipeline configuration
 ├── main.py                      # pipeline entry point
-├── utils.py                     # ingestion functions
-├── tests/
-│   └── test_utils.py            # pytest unit tests
+├── utils.py                     # ingestion functions         # pytest unit tests
 ├── data/
 │   └── raw/                     # ingested CSVs (gitignored)
-├── dbt_transperth/
+├── dbt_afl/
 │   ├── dbt_project.yml
 │   ├── profiles.yml             # BigQuery connection (gitignored)
 │   ├── macros/
@@ -67,13 +64,14 @@ transperth-data-etl/
 │           └── schema.yml
 ├── airflow/
 │   └── dags/
-│       └── transperth_pipeline_dag.py
-└── .github/
-    └── workflows/
-        └── dbt_docs.yml         # auto-deploy dbt docs to GitHub Pages
+│       └── main_dag.py
+│       └── config.py
+│       └── utils/
+├── docker-compose.yml          # used to store metabase configuration
+
 ```
 
---- -->
+---
 
 ## Data Source
 
@@ -135,7 +133,7 @@ OR, if you are using python3:
 python3 main.py
 ```
 
-<!-- ---
+---
 
 ## What I'd Improve at Scale
 
@@ -145,11 +143,15 @@ These are the next steps I'd take if this pipeline were running in a production 
 
 **Separate virtual environments per task** — Airflow's `ExternalPythonOperator` would allow each task to run in its own isolated Python environment, preventing dependency conflicts between the ingestion libraries and dbt as the project grows.
 
-**Secrets management** — Environment variables work for local development but production would use Google Secret Manager, Amazon S3 Secrets Manager or HashiCorp Vault to manage the service account credentials, with Airflow's connections store used instead of environment variables.
+**Secrets management** — Environment variables work for local development but production would use Google Secret Manager, Amazon S3 Secrets Manager or Azure Key Vault to manage the service account credentials, with Airflow's connections store used instead of environment variables.
 
-**Data monitoring** — The GTFS feed is updated periodically but not on a fixed schedule. A freshness check step in the DAG (using dbt's `source freshness` command) would alert if the source data hasn't changed within an expected window, catching silent feed failures before they propagate to the dashboard. I would setup something like alert system to trigger warning to messenger platforms such as Google Chat's or Slack's webhook.
+**Data monitoring** — The AFL data feed from api-sports.io is updated periodically but not on a fixed schedule. A freshness check step in the DAG (using dbt's `source freshness` command) would alert if the source data hasn't changed within an expected window, catching silent feed failures before they propagate to the dashboard. I would setup something like alert system to trigger warning to messenger platforms such as Google Chat's or Slack's webhook.
 
-**Cloud-hosted Airflow** — Running Airflow locally means the pipeline only runs when my machine is on and hosting the source code. Cloud Composer (GCP's managed Airflow) or Astronomer would give the pipeline true 24/7 scheduling reliability for real use cases. -->
+**Schema Fingerprint Storing** — Schema verification results generated by Gemini AI could produce varying confidence score, depending heavily on the similarity and data types matching of the received schema compared to the ideal schema. Schemas below the minimum threshold is in this current development only stored and notified. The better approach to do if the developing team has sufficient resources is to create a fingerprinting mechanism, so that the same reproduced error would be cachhed in the system and will not flagged as low confidence schema more than once.
+
+**Cloud-hosted Airflow** — Running Airflow locally means the pipeline only runs when my machine is on and hosting the source code. Cloud Composer (GCP's managed Airflow) or Astronomer would give the pipeline true 24/7 scheduling reliability for real use cases.
+
+**Gemini 
 
 ---
 
@@ -161,5 +163,5 @@ The making of this repository as a github porfolio project gives its credit to [
 ## Author
 
 **Jason Zelin**
-Data Engineer | Perth, WA
+Analytics Engineer | Perth, WA
 [GitHub](https://github.com/jasonzelin) · [LinkedIn](https://linkedin.com/in/jason-zelin)
