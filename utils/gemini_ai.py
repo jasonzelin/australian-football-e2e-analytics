@@ -3,19 +3,16 @@ from pathlib import Path
 import logging
 
 import pandas as pd
-
-from utils import logger as app_logger
 import config
 
 import vertexai
 from vertexai.generative_models import GenerativeModel, GenerationConfig
 
-logger = app_logger.setup_logging(log_dir=config.LOG_DIR)
-
 def gemini_schema_verify(
         data_dir: str,
         project_id: str,
-        location: str
+        location: str,
+        logger: logging.Logger
     ) -> dict:
 
     vertexai.init(project=project_id, location=location)
